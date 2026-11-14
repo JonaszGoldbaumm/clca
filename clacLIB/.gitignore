@@ -1,0 +1,6 @@
+.editorconfig
+.vs/*
+*.dll
+*.mod
+*.o
+*.obj
