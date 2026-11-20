@@ -3,7 +3,7 @@ module MathBase
     implicit none
     
 contains
-    ! addition of two values
+
     function r_add(a, b, status) result(res) bind(C)
         REAL(c_double), value :: a, b
         integer(c_short), intent(out) :: status
@@ -13,7 +13,7 @@ contains
         status = 0   
     end function r_add
 
-    ! addition of two values
+
     function i_add(a, b, status) result(res) bind(C)
         INTEGER(c_int), value :: a, b
         integer(c_short), intent(out) :: status
@@ -23,7 +23,7 @@ contains
         status = 0
     end function i_add
 
-    ! subtraction of b value from a
+
     function r_sub(a, b, status) result(res) bind(C)
         real(c_double), value :: a, b
         integer(c_short), intent(out) :: status
@@ -33,7 +33,7 @@ contains
         status = 0
     end function r_sub
 
-    ! subtraction of b value from a
+
     function i_sub(a, b, status) result(res) bind(C)
         integer(c_int), value :: a, b
         integer(c_short), intent(out) :: status
@@ -43,7 +43,7 @@ contains
         status = 0
     end function i_sub
 
-    ! multiplication of two values
+
     function r_mul(a, b, status) result(res) bind(C)
         real(c_double), value :: a, b
         integer(c_short), intent(out) :: status
@@ -53,7 +53,7 @@ contains
         status = 0
     end function r_mul
 
-    ! multiplication of two values
+
     function i_mul(a, b, status) result(res) bind(C)
         integer(c_int), value :: a, b
         integer(c_short), intent(out) :: status
@@ -63,7 +63,7 @@ contains
         status = 0
     end function i_mul
 
-    ! division of a value by b value
+
     function r_div(a, b, status) result(res) bind(C)
         real(c_double), value :: a, b
         integer(c_short), intent(out) :: status
@@ -77,7 +77,7 @@ contains
         status = 0
     end function r_div
 
-    ! division of a value by b value
+
     function i_div(a, b, status) result(res) bind(C)
         integer(c_int), value :: a, b
         integer(c_short), intent(out) :: status
