@@ -1,17 +1,28 @@
 namespace clacF
 {
+    
     internal static class Program
     {
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
-        {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+        { 
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            string dllPath = Path.Combine(AppContext.BaseDirectory, Constants.CalculatorDllName);    
+            
+            if(!File.Exists(dllPath)) {
+                MessageBox.Show(
+                    text: $"Required library '{Constants.CalculatorDllName}' not found in executable directory!",
+                    caption: "Missing Dependency",
+                    buttons: MessageBoxButtons.OK,
+                    icon: MessageBoxIcon.Error
+                    );
+                Application.Exit();
+            }
+            Application.Run(new MainForm());
         }
     }
 }
