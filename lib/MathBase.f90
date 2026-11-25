@@ -128,4 +128,18 @@ contains
         status = 0
     end function i_modulo
 
+    function r_sqrt(a, status) result(res) bind(C)
+        real(c_double), value :: a 
+        integer(c_short), intent(out) :: status
+        integer(c_int) :: res
+        
+        if ( a < 0 ) then
+            res = -1
+            status = -1
+            return
+        end if
+        res = sqrt(a)
+        status = 0
+    end function r_sqrt
+
 end module MathBase
