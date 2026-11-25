@@ -229,8 +229,13 @@ namespace clacF
             {
                 if(!_isActive || _selectedOp is null)
                 {
+                    _firstInput.Enabled = false;
                     _calculateBtn.Enabled = false;
                     return;
+                }
+                if(_selectedOp is not null)
+                {
+                    _firstInput.Enabled = true;
                 }
                 bool hasValidInputs = _selectedOp.InputCount == 1
                     ? TryParseScalar(_firstInput.Text, out _)

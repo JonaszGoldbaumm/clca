@@ -80,6 +80,7 @@
             // newCalculationToolStripMenuItem
             // 
             newCalculationToolStripMenuItem.Name = "newCalculationToolStripMenuItem";
+            newCalculationToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N;
             newCalculationToolStripMenuItem.Size = new Size(161, 22);
             newCalculationToolStripMenuItem.Text = "New Calculation";
             newCalculationToolStripMenuItem.Click += newCalculationToolStripMenuItem_Click;
@@ -87,6 +88,7 @@
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q;
             exitToolStripMenuItem.Size = new Size(161, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
@@ -101,6 +103,7 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             aboutToolStripMenuItem.Size = new Size(107, 22);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
@@ -220,6 +223,8 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(521, 527);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Controls.Add(pnlHigherDimensions);
             Controls.Add(grpInputsAndResult);
             Controls.Add(grpOperations);
