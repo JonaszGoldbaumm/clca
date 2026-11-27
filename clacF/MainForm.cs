@@ -1,4 +1,5 @@
 using clacF.controllers;
+using library;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -102,16 +103,27 @@ namespace clacF
         }
         private void btnCalculate_Click(object? sender, EventArgs e)
         {
-            if (!_activeController.TryExecute(out string? error))
+            if (_activeController is null) return;
+            try
             {
-                MessageBox.Show(
-                    this,
-                    error ?? "Unable to calculate",
-                    "Calculation Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                    );
+                if (!_activeController.TryExecute(out string? error))
+                {
+                    MessageBox.Show(
+                        this,
+                        error ?? "Unable to calculate",
+                        "Calculation Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                        );
+                }
+            } catch (DllNotFoundException ex)
+            {
+                UhOh.CrashWithNoSurvivorsFromDll(this, ex);
+            } catch (BadImageFormatException ex)
+            {
+                UhOh.CrashWithNoSurvivorsFromDll(this, ex);
             }
+            
         }
         private void newCalculationToolStripMenuItem_Click(object? sender, EventArgs e)
         {

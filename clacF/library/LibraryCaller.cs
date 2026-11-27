@@ -7,6 +7,23 @@ using System.Text;
 
 namespace library
 {
+    internal static class UhOh
+    {
+        internal static void CrashWithNoSurvivorsFromDll(Form self, Exception ex)
+        {
+            string msg = ex is DllNotFoundException
+                ? $"Core library missing:\n{ex.Message}"
+                : $"Core library possibly broken:\n{ex.Message}";
+            MessageBox.Show(
+                self,
+                msg,
+                "Fatal Library Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            Environment.Exit(1);
+        }
+    }
+    
     internal abstract class LibraryCaller;
     internal class ScalarCaller : LibraryCaller
     {
@@ -57,9 +74,9 @@ namespace library
             EntryPoint = "r_arr_1d_div_nobase",
             CallingConvention = CallingConvention.Cdecl)]
         public static extern double DivNoBase([In] double[] array, int n, out short status);
-        [DllImport($"{Constants.CalculatorDllName}",
-            EntryPoint = "r_arr_1d_abs",
-            CallingConvention = CallingConvention.Cdecl)]
-        public static extern double Abs([In] double[] array, int n, [Out] double[] res, out short status);
+        //[DllImport($"{Constants.CalculatorDllName}",
+        //    EntryPoint = "r_arr_1d_abs",
+        //    CallingConvention = CallingConvention.Cdecl)]
+        //public static extern double Abs([In] double[] array, int n, [Out] double[] res, out short status);
     }
 }
