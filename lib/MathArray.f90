@@ -25,7 +25,7 @@ contains
 
         res = arr(1)
         do i = 2, n
-            res = res + arr(i)
+            res = res - arr(i)
         end do
         status = 0
         
