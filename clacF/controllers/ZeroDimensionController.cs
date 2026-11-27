@@ -5,64 +5,33 @@ using System.Text;
 
 namespace clacF.controllers
 {
-    internal sealed class ZeroDimensionController : IDimensionController 
+    internal sealed class ZeroDimensionController : ADimensionController<Operation0DTag>
     {
-        private enum OperationTag
-        {
-            Add, Sub, Mul, Div, Mod, Modulo, Sqrt
-        }
-        private sealed record Operation0D(string Name, OperationTag tag, int InputCount = 2);
-        private static readonly IReadOnlyList<Operation0D> ops = [
-            new("Add (+)", OperationTag.Add),
-                new("Subtract (-)", OperationTag.Sub),
-                new("Multiply (•)", OperationTag.Mul),
-                new("Divide (/)", OperationTag.Div),
-                new("MOD", OperationTag.Mod),
-                new("Modulo", OperationTag.Modulo),
-                new("Sqrt (√)", OperationTag.Sqrt, 1)
+        private static new readonly IReadOnlyList<OperationR> ops = [
+            new("Add (+)", Operation0DTag.Add),
+                new("Subtract (-)", Operation0DTag.Sub),
+                new("Multiply (•)", Operation0DTag.Mul),
+                new("Divide (/)", Operation0DTag.Div),
+                new("MOD", Operation0DTag.Mod),
+                new("Modulo",   Operation0DTag.Modulo),
+                new("Sqrt (√)", Operation0DTag.Sqrt, 1)
             ];
 
-        private readonly Panel _pnlOperationsList;
-        private readonly GroupBox _grpOperations;
-        private readonly GroupBox _inputsGroup;
-        private readonly TextBox _firstInput;
-        private readonly Label _secondLabel;
-        private readonly TextBox _secondInput;
-        private readonly TextBox _result;
-        private readonly Button _calculateBtn;
-
-        private Operation0D? _selectedOp;
-        private bool _isActive;
-
-        public string DimensionName => "0D";
-
-        public ZeroDimensionController(
-            Panel pnlOperationsList,
-            GroupBox grpOperations,
-            GroupBox inputsGroup,
-            TextBox firstInput,
-            Label secondLabel,
-            TextBox secondInput,
-            TextBox result,
-            Button calculateBtn
-            )
+        public ZeroDimensionController(Panel pnlOperationsList, GroupBox grpOperations, GroupBox inputsGroup, Label firstLabel, TextBox firstInput, Label secondLabel, TextBox secondInput, TextBox result, Button calculateBtn) : base(pnlOperationsList, grpOperations, inputsGroup, firstLabel, firstInput, secondLabel, secondInput, result, calculateBtn)
         {
-            _pnlOperationsList = pnlOperationsList;
-            _grpOperations = grpOperations;
-            _inputsGroup = inputsGroup;
-            _firstInput = firstInput;
-            _secondLabel = secondLabel;
-            _secondInput = secondInput;
-            _result = result;
-            _calculateBtn = calculateBtn;
         }
-        public void Initialize()
+
+        override public string DimensionName => "0D";
+
+        override public void Initialize()
         {
             _grpOperations.Text = "0D Operations";
+            _firstLabel.Text = "1st Number";
+            _secondLabel.Text = "2nd Number";
             _pnlOperationsList.Controls.Clear();
             for (int i = 0; i < ops.Count; i++)
             {
-                Operation0D operation = ops[i];
+                OperationR operation = ops[i];
                 var radioButton = new RadioButton
                 {
                     Name = $"rdo0DOp{i}",
@@ -80,50 +49,28 @@ namespace clacF.controllers
             UpdateInputSlotsForSelectedOperation();
             RefreshAvailability();
         }
-        public void SetActive(bool active)
+        override public void RefreshAvailability()
         {
-            _isActive = active;
-            _pnlOperationsList.Enabled = active;
-            _inputsGroup.Enabled = active;
-
-            if (!active)
-            {
-                ClearSelection();
-            }
-            RefreshAvailability();
-        }
-        public void Reset()
-        {
-            SetActive(true);
-            ClearSelection();
-            _firstInput.Clear();
-            _secondInput.Clear();
-            _result.Clear();
-            UpdateInputSlotsForSelectedOperation();
-            RefreshAvailability();
-        }
-        public void RefreshAvailability()
-        {
-            if (!_isActive || _selectedOp is null)
+            if (!IsActive || SelectedOperation is null)
             {
                 _firstInput.Enabled = false;
                 _calculateBtn.Enabled = false;
                 return;
             }
-            if (_selectedOp is not null)
+            if (SelectedOperation is not null)
             {
                 _firstInput.Enabled = true;
             }
-            bool hasValidInputs = _selectedOp.InputCount == 1
+            bool hasValidInputs = SelectedOperation!.InputCount == 1
                 ? TryParseScalar(_firstInput.Text, out _)
                 : TryParseScalar(_firstInput.Text, out _)
                 && TryParseScalar(_secondInput.Text, out _);
             _calculateBtn.Enabled = hasValidInputs;
         }
-        public bool TryExecute(out string? error)
+        override public bool TryExecute(out string? error)
         {
             error = null;
-            if (!_isActive || _selectedOp is null)
+            if (!IsActive || SelectedOperation is null)
             {
                 error = "Select an operation first.";
                 return false;
@@ -134,7 +81,7 @@ namespace clacF.controllers
                 return false;
             }
             double? secondVal = null;
-            if (_selectedOp.InputCount == 2)
+            if (SelectedOperation.InputCount == 2)
             {
                 if (!TryParseScalar(_secondInput.Text, out double parsedSecond))
                 {
@@ -145,7 +92,7 @@ namespace clacF.controllers
             }
 
             double res;
-            short exitcode = 0;
+            short exitcode = -9;
             res = Execute(firstVal, secondVal != null ? (double)secondVal : 0, out exitcode);
             if (exitcode != 0)
             {
@@ -157,15 +104,15 @@ namespace clacF.controllers
         }
         private double Execute(double a, double b, out short exitcode)
         {
-            if (_selectedOp is not null) switch (_selectedOp.tag)
+            if (SelectedOperation is not null) switch (SelectedOperation.Tag)
                 {
-                    case OperationTag.Add: return library.ScalarCaller.Add(a, b, out exitcode);
-                    case OperationTag.Sub: return library.ScalarCaller.Sub(a, b, out exitcode);
-                    case OperationTag.Mul: return library.ScalarCaller.Mul(a, b, out exitcode);
-                    case OperationTag.Div: return library.ScalarCaller.Div(a, b, out exitcode);
-                    case OperationTag.Mod: return library.ScalarCaller.Mod(a, b, out exitcode);
-                    case OperationTag.Modulo: return library.ScalarCaller.Modulo(a, b, out exitcode);
-                    case OperationTag.Sqrt: return library.ScalarCaller.Sqrt(a, out exitcode);
+                    case Operation0DTag.Add: return library.ScalarCaller.Add(a, b, out exitcode);
+                    case Operation0DTag.Sub: return library.ScalarCaller.Sub(a, b, out exitcode);
+                    case Operation0DTag.Mul: return library.ScalarCaller.Mul(a, b, out exitcode);
+                    case Operation0DTag.Div: return library.ScalarCaller.Div(a, b, out exitcode);
+                    case Operation0DTag.Mod: return library.ScalarCaller.Mod(a, b, out exitcode);
+                    case Operation0DTag.Modulo: return library.ScalarCaller.Modulo(a, b, out exitcode);
+                    case Operation0DTag.Sqrt: return library.ScalarCaller.Sqrt(a, out exitcode);
                     default:
                         exitcode = -2;
                         return -1;
@@ -178,31 +125,22 @@ namespace clacF.controllers
         }
         private void OnOperationCheckedChanged(object? sender, EventArgs e)
         {
-            if (sender is RadioButton { Checked: true, Tag: Operation0D operation })
+            if (sender is RadioButton { Checked: true, Tag: OperationR operation })
             {
-                _selectedOp = operation;
+                SelectedOperation = operation;
                 UpdateInputSlotsForSelectedOperation();
                 RefreshAvailability();
             }
         }
-        private void UpdateInputSlotsForSelectedOperation()
+        override public void UpdateInputSlotsForSelectedOperation()
         {
-            bool needsSecondInput = _selectedOp?.InputCount == 2;
+            bool needsSecondInput = SelectedOperation?.InputCount == 2;
             _secondInput.Visible = needsSecondInput;
             _secondLabel.Visible = needsSecondInput;
             if (!needsSecondInput)
             {
                 _secondInput.Clear();
             }
-        }
-        private void ClearSelection()
-        {
-            _selectedOp = null;
-            foreach (RadioButton rdo in _pnlOperationsList.Controls.OfType<RadioButton>())
-            {
-                rdo.Checked = false;
-            }
-            UpdateInputSlotsForSelectedOperation();
         }
         private static bool TryParseScalar(string? rawText, out double val)
         {
@@ -216,5 +154,42 @@ namespace clacF.controllers
                 double.TryParse(trim, NumberStyles.Float, CultureInfo.InvariantCulture, out val);
             return parsed && !double.IsNaN(val) && !double.IsInfinity(val);
         }
+        override protected void PopulateOperationsList()
+        {
+            SelectedOperation = null;
+            _pnlOperationsList.Controls.Clear();
+
+            for (int i = 0; i < ops.Count; i++)
+            {
+                OperationR operation = ops[i];
+                var radioButton = new RadioButton
+                {
+                    Name = $"rdo0DOp{i}",
+                    Text = operation.Name,
+                    Tag = operation,
+                    Left = 15,
+                    Top = 6 + (i * 28),
+                    AutoSize = true
+                };
+
+                radioButton.CheckedChanged += OnOperationCheckedChanged;
+                _pnlOperationsList.Controls.Add(radioButton);
+            }
+        }
+        public override void SetActive(bool active)
+        {
+            base.SetActive(active);
+            if (active)
+            {
+                _grpOperations.Text = "0D Operations";
+                PopulateOperationsList();
+                UpdateInputSlotsForSelectedOperation();
+                RefreshAvailability();
+            }
+        }
+
+        protected override void OnFirstInputKeyPress(object? sender, KeyPressEventArgs e)
+            => FilterSingleNumberKeyPress(sender, e);
+
     }
 }
