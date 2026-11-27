@@ -20,7 +20,7 @@ namespace clacF
                     buttons: MessageBoxButtons.OK,
                     icon: MessageBoxIcon.Error
                     );
-                Application.Exit();
+                return;
             }
             Application.Run(new MainForm());
         }

@@ -14,7 +14,7 @@
         private Label lblDimension = null!;
         private ComboBox cmbDimensions = null!;
 
-        // 0D mode containers (managed by ZeroDimensionController; toggled when other dimensions are active)
+        private Panel pnlOperationsList = null!;
         private GroupBox grpOperations = null!;
         private GroupBox grpInputsAndResult = null!;
         private Label lblFirstNumber = null!;
@@ -25,7 +25,6 @@
         private Label lblResult = null!;
         private TextBox txtResult = null!;
 
-        // Reserved area for future dimension modes (e.g., 1D vectors/arrays or 2D matrices)
         private Panel pnlHigherDimensions = null!;
 
         protected override void Dispose(bool disposing)
@@ -42,12 +41,14 @@
             menuStripMain = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             newCalculationToolStripMenuItem = new ToolStripMenuItem();
+            copyToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             lblDimension = new Label();
             cmbDimensions = new ComboBox();
             grpOperations = new GroupBox();
+            pnlOperationsList = new Panel();
             grpInputsAndResult = new GroupBox();
             lblFirstNumber = new Label();
             txtFirstNumber = new TextBox();
@@ -58,6 +59,7 @@
             txtResult = new TextBox();
             pnlHigherDimensions = new Panel();
             menuStripMain.SuspendLayout();
+            grpOperations.SuspendLayout();
             grpInputsAndResult.SuspendLayout();
             SuspendLayout();
             // 
@@ -66,13 +68,13 @@
             menuStripMain.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, helpToolStripMenuItem });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
-            menuStripMain.Size = new Size(521, 24);
+            menuStripMain.Size = new Size(534, 24);
             menuStripMain.TabIndex = 0;
             menuStripMain.Text = "menuStripMain";
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newCalculationToolStripMenuItem, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newCalculationToolStripMenuItem, copyToolStripMenuItem, exitToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -80,16 +82,23 @@
             // newCalculationToolStripMenuItem
             // 
             newCalculationToolStripMenuItem.Name = "newCalculationToolStripMenuItem";
-            newCalculationToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N;
-            newCalculationToolStripMenuItem.Size = new Size(161, 22);
+            newCalculationToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
+            newCalculationToolStripMenuItem.Size = new Size(204, 22);
             newCalculationToolStripMenuItem.Text = "New Calculation";
             newCalculationToolStripMenuItem.Click += newCalculationToolStripMenuItem_Click;
+            // 
+            // copyToolStripMenuItem
+            // 
+            copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
+            copyToolStripMenuItem.Size = new Size(204, 22);
+            copyToolStripMenuItem.Text = "Copy";
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q;
-            exitToolStripMenuItem.Size = new Size(161, 22);
+            exitToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Q;
+            exitToolStripMenuItem.Size = new Size(204, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -103,8 +112,8 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            aboutToolStripMenuItem.Size = new Size(107, 22);
+            aboutToolStripMenuItem.ShortcutKeys = Keys.F1;
+            aboutToolStripMenuItem.Size = new Size(126, 22);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
@@ -128,12 +137,21 @@
             // 
             // grpOperations
             // 
+            grpOperations.Controls.Add(pnlOperationsList);
             grpOperations.Location = new Point(20, 76);
             grpOperations.Name = "grpOperations";
             grpOperations.Size = new Size(200, 434);
             grpOperations.TabIndex = 3;
             grpOperations.TabStop = false;
             grpOperations.Text = "0D Operations";
+            // 
+            // pnlOperationsList
+            // 
+            pnlOperationsList.AutoScroll = true;
+            pnlOperationsList.Location = new Point(8, 22);
+            pnlOperationsList.Name = "pnlOperationsList";
+            pnlOperationsList.Size = new Size(184, 406);
+            pnlOperationsList.TabIndex = 0;
             // 
             // grpInputsAndResult
             // 
@@ -154,7 +172,7 @@
             // lblFirstNumber
             // 
             lblFirstNumber.AutoSize = true;
-            lblFirstNumber.Location = new Point(16, 30);
+            lblFirstNumber.Location = new Point(24, 286);
             lblFirstNumber.Name = "lblFirstNumber";
             lblFirstNumber.Size = new Size(63, 15);
             lblFirstNumber.TabIndex = 0;
@@ -162,7 +180,7 @@
             // 
             // txtFirstNumber
             // 
-            txtFirstNumber.Location = new Point(105, 27);
+            txtFirstNumber.Location = new Point(113, 283);
             txtFirstNumber.Name = "txtFirstNumber";
             txtFirstNumber.Size = new Size(150, 23);
             txtFirstNumber.TabIndex = 0;
@@ -170,7 +188,7 @@
             // lblSecondNumber
             // 
             lblSecondNumber.AutoSize = true;
-            lblSecondNumber.Location = new Point(16, 64);
+            lblSecondNumber.Location = new Point(24, 320);
             lblSecondNumber.Name = "lblSecondNumber";
             lblSecondNumber.Size = new Size(63, 15);
             lblSecondNumber.TabIndex = 1;
@@ -178,14 +196,14 @@
             // 
             // txtSecondNumber
             // 
-            txtSecondNumber.Location = new Point(105, 61);
+            txtSecondNumber.Location = new Point(113, 317);
             txtSecondNumber.Name = "txtSecondNumber";
             txtSecondNumber.Size = new Size(150, 23);
             txtSecondNumber.TabIndex = 1;
             // 
             // btnCalculate
             // 
-            btnCalculate.Location = new Point(105, 96);
+            btnCalculate.Location = new Point(113, 352);
             btnCalculate.Name = "btnCalculate";
             btnCalculate.Size = new Size(150, 28);
             btnCalculate.TabIndex = 2;
@@ -195,7 +213,7 @@
             // lblResult
             // 
             lblResult.AutoSize = true;
-            lblResult.Location = new Point(16, 144);
+            lblResult.Location = new Point(24, 400);
             lblResult.Name = "lblResult";
             lblResult.Size = new Size(42, 15);
             lblResult.TabIndex = 3;
@@ -203,7 +221,7 @@
             // 
             // txtResult
             // 
-            txtResult.Location = new Point(105, 141);
+            txtResult.Location = new Point(113, 397);
             txtResult.Name = "txtResult";
             txtResult.ReadOnly = true;
             txtResult.Size = new Size(150, 23);
@@ -212,7 +230,7 @@
             // 
             // pnlHigherDimensions
             // 
-            pnlHigherDimensions.Location = new Point(421, 462);
+            pnlHigherDimensions.Location = new Point(467, 38);
             pnlHigherDimensions.Name = "pnlHigherDimensions";
             pnlHigherDimensions.Size = new Size(42, 48);
             pnlHigherDimensions.TabIndex = 5;
@@ -222,24 +240,27 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(521, 527);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
+            ClientSize = new Size(534, 543);
             Controls.Add(pnlHigherDimensions);
             Controls.Add(grpInputsAndResult);
             Controls.Add(grpOperations);
             Controls.Add(cmbDimensions);
             Controls.Add(lblDimension);
             Controls.Add(menuStripMain);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MainMenuStrip = menuStripMain;
+            MaximizeBox = false;
             Name = "MainForm";
             Text = "Calculator";
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
+            grpOperations.ResumeLayout(false);
             grpInputsAndResult.ResumeLayout(false);
             grpInputsAndResult.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
+
+        private ToolStripMenuItem copyToolStripMenuItem;
     }
 }

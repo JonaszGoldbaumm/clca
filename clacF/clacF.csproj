@@ -6,11 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
 	<Target Name="CopyDllDebug" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
 		<PropertyGroup>
-			<CalculationDllPath>..\lib\MathBase.dll</CalculationDllPath>
+			<CalculatorDllPath>..\lib\MathBase.dll</CalculatorDllPath>
 		</PropertyGroup>
 		<Warning Condition="!Exists('$(CalculatorDllPath)')" Text="Required dll not found" />
 		<Copy SourceFiles="$(CalculatorDllPath)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" Condition="Exists('$(CalculatorDllPath)')" />
