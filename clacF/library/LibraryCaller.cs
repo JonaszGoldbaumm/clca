@@ -1,6 +1,7 @@
 ﻿using clacF;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -37,5 +38,28 @@ namespace library
             EntryPoint = "r_sqrt",
             CallingConvention = CallingConvention.Cdecl)]
         public static extern double Sqrt(double a, out short exitcode);
+    }
+    internal class Array1DCaller : LibraryCaller
+    {
+        [DllImport($"{Constants.CalculatorDllName}",
+            EntryPoint = "r_arr_1d_sum_nobase",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern double SumNoBase([In] double[] array, int n, out short status);
+        [DllImport($"{Constants.CalculatorDllName}",
+            EntryPoint = "r_arr_1d_sub_nobase",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern double SubNoBase([In] double[] array, int n, out short status);
+        [DllImport($"{Constants.CalculatorDllName}",
+            EntryPoint = "r_arr_1d_mul_nobase",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern double MulNoBase([In] double[] array, int n, out short status);
+        [DllImport($"{Constants.CalculatorDllName}",
+            EntryPoint = "r_arr_1d_div_nobase",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern double DivNoBase([In] double[] array, int n, out short status);
+        [DllImport($"{Constants.CalculatorDllName}",
+            EntryPoint = "r_arr_1d_abs",
+            CallingConvention = CallingConvention.Cdecl)]
+        public static extern double Abs([In] double[] array, int n, [Out] double[] res, out short status);
     }
 }
