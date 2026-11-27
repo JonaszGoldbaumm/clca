@@ -41,6 +41,6 @@ jobs:
       - name: Restore and build solution
         shell: pwsh
         run: |
-          cd clacF
+          cd clcaF
           dotnet restore
           dotnet build --configuration $env:DOTNET_CONFIGURATION --no-restore

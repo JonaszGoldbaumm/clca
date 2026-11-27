@@ -14,15 +14,18 @@ System.Console.WriteLine($"r0div:\t{MathBase.r_div(10.1, 0, out exitcode)}\tExit
 System.Console.WriteLine($"r_mod:\t{MathBase.i_mod(17, -5, out exitcode)}\tExitcode: {exitcode}");
 System.Console.WriteLine($"r_mdl:\t{MathBase.i_modulo(17, -5, out exitcode)}\tExitcode: {exitcode}");
 System.Console.WriteLine($"r_arr_1d_sum_nobase:\t{MathBase.r_arr_1d_sum_nobase(simple_double_array, simple_double_array.Length, out exitcode)}\tExitcode: {exitcode}");
-double[,] simple_matrix =
-{
-    {1.0,2.0,3.0},
-    {4.0,5.5,6.67}
-};
-var fortran_cmptbl = ToFortranArray(simple_matrix); 
-double[] res_of_cols = new double[3];
-MathBase.r_arr_2d_sub_cols(fortran_cmptbl, 2, 3, res_of_cols, out exitcode);
-System.Console.WriteLine($"r_arr_2d_sub_cols[2]:\t{res_of_cols[2]}\tExitcode: {exitcode}");
+double[] a = [4.0, -4.0], res = [0,0];
+MathBase.r_arr_1d_abs(a, a.Length, res, out exitcode);
+System.Console.WriteLine($"{res[1]}");
+// double[,] simple_matrix =
+// {
+//     {1.0,2.0,3.0},
+//     {4.0,5.5,6.67}
+// };
+// var fortran_cmptbl = ToFortranArray(simple_matrix); 
+// double[] res_of_cols = new double[3];
+// MathBase.r_arr_2d_sub_cols(fortran_cmptbl, 2, 3, res_of_cols, out exitcode);
+// System.Console.WriteLine($"r_arr_2d_sub_cols[2]:\t{res_of_cols[2]}\tExitcode: {exitcode}");
 static T[] ToFortranArray<T>(T[,] array)
 {
     int rows = array.GetLength(0);
@@ -108,7 +111,12 @@ public static class MathBase {
         CallingConvention = CallingConvention.Cdecl
     )]
     public static extern double r_arr_1d_sum_nobase([In] double[] array, int n, out short status);
-
+    [DllImport("MathBase.dll",
+        EntryPoint = "r_arr_1d_abs",
+        CallingConvention = CallingConvention.Cdecl
+    )]
+    public static extern double r_arr_1d_abs([In] double[] array, int n, [Out] double[] res, out short status);
+    
     [DllImport("MathBase.dll",
         EntryPoint = "r_arr_2d_sub_cols",
         CallingConvention = CallingConvention.Cdecl

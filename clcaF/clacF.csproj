@@ -14,7 +14,7 @@
 			<CalculatorDllPath>..\lib\MathBase.dll</CalculatorDllPath>
 		</PropertyGroup>
 		<Warning Condition="!Exists('$(CalculatorDllPath)')" Text="Required dll not found" />
-		<Copy SourceFiles="$(CalculatorDllPath)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" Condition="Exists('$(CalculatorDllPath)')" />
+		<Copy SourceFiles="$(CalculatorDllPath)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" Condition="Exists('$(CalculatorDllPath)')" />
 	</Target>
 
 	<ItemGroup>

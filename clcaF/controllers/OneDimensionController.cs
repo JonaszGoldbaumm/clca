@@ -13,7 +13,15 @@ namespace clacF.controllers
             new("Add to first value (+)", Operation1DTag.Add_nobase, 1),
                 new("Subtract from first value (-)", Operation1DTag.Sub_nobase, 1),
                 new("Multiply the first value (•)", Operation1DTag.Mul_nobase, 1),
-                new("Divide the first value (/)", Operation1DTag.Div_nobase, 1)
+                new("Divide the first value (/)", Operation1DTag.Div_nobase, 1),
+            new("Absolutes (ABS)", Operation1DTag.Abs, 1),
+            new("Antiabsolutes (-ABS)", Operation1DTag.Antiabs, 1),
+            new("Minimum (MIN)", Operation1DTag.Min, 1),
+            new("Maximum (MAX)", Operation1DTag.Max, 1),
+            new("Sqrt of sum (√+)", Operation1DTag.SqrtOfSum, 1),
+            new("Nth root of sum (n√+)",Operation1DTag.NthrtOfSum),
+            new("Floor (_)", Operation1DTag.Floor, 1),
+            new("Ceiling (‾)", Operation1DTag.Ceiling, 1)
             ];
 
         public OneDimensionController(Panel pnlOperationsList, GroupBox grpOperations, GroupBox inputsGroup, Label firstLabel, TextBox firstInput, Label secondLabel, TextBox secondInput, TextBox result, Button calculateBtn) : base(pnlOperationsList, grpOperations, inputsGroup, firstLabel, firstInput, secondLabel, secondInput, result, calculateBtn)
@@ -100,12 +108,33 @@ namespace clacF.controllers
         }
         private double[] Execute(double[] arr, double b, out short exitcode)
         {
+            double[] res;
             if(SelectedOperation is not null) switch (SelectedOperation.Tag)
                 {
-                    case Operation1DTag.Add_nobase: return [library.Array1DCaller.SumNoBase(arr, arr.Length, out exitcode)] ;
+                    case Operation1DTag.Add_nobase: return [library.Array1DCaller.SumNoBase(arr, arr.Length, out exitcode)];
                     case Operation1DTag.Sub_nobase: return [library.Array1DCaller.SubNoBase(arr, arr.Length, out exitcode)];
                     case Operation1DTag.Mul_nobase: return [library.Array1DCaller.MulNoBase(arr, arr.Length, out exitcode)];
                     case Operation1DTag.Div_nobase: return [library.Array1DCaller.DivNoBase(arr, arr.Length, out exitcode)];
+                    case Operation1DTag.Abs:
+                        res = new double[arr.Length];
+                        library.Array1DCaller.Abs(arr, arr.Length, res, out exitcode);
+                        return res;
+                    case Operation1DTag.Antiabs:
+                        res = new double[arr.Length];
+                        library.Array1DCaller.AntiAbs(arr, arr.Length, res, out exitcode);
+                        return res;
+                    case Operation1DTag.Min: return [library.Array1DCaller.Min(arr, arr.Length, out exitcode)];
+                    case Operation1DTag.Max: return [library.Array1DCaller.Max(arr, arr.Length, out exitcode)];
+                    case Operation1DTag.SqrtOfSum: return [library.Array1DCaller.SqrtOfSum(arr, arr.Length, out exitcode)];
+                    case Operation1DTag.NthrtOfSum: return [library.Array1DCaller.NthrtofSum(arr, arr.Length, (int)b, out exitcode)];
+                    case Operation1DTag.Floor:
+                        res = new double[arr.Length];
+                        library.Array1DCaller.Floor(arr, arr.Length, res, out exitcode);
+                        return res;
+                    case Operation1DTag.Ceiling:
+                        res = new double[arr.Length];
+                        library.Array1DCaller.Ceiling(arr, arr.Length, res, out exitcode);
+                        return res;
                     default:
                         exitcode = -2;
                         return [-1.0];

@@ -11,7 +11,7 @@ namespace clacF.controllers
     }
     internal enum Operation1DTag 
     {
-        Add_nobase, Sub_nobase, Mul_nobase, Div_nobase, Abs
+        Add_nobase, Sub_nobase, Mul_nobase, Div_nobase, Abs, Antiabs, Min, Max, SqrtOfSum, NthrtOfSum, Floor, Ceiling
     }
 
     internal abstract class ADimensionController
