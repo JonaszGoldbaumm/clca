@@ -3,6 +3,9 @@ name: Build Clca check
 on:
   push:
     branches: ["**"]
+    paths:
+      - "lib/**"
+      - "clcaF/**"
   pull_request:
 
 permissions:

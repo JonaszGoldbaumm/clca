@@ -1,5 +1,6 @@
 # CLCA
-`CLCA` is a simple calculator application for testing inoperability between Fortran standard library capabilities and C# WinForm UI framework.
+
+`CLCA` is a simple calculator application for testing inoperability between Fortran standard library capabilities and C# WinForm UI framework including operations on scalars, arrays and matrices.
 
 [**lib**](lib) contains the fortran source files and build script compiling the `.dll` library. Build is based on gfortran (ver. `16.2+`) provided by MinGW, compiling into a single shared `.dll`.
 
