@@ -1,0 +1,46 @@
+name: Build Clca check
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      DOTNET_CONFIGURATION: Debug
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Setup MinGW gfortran
+        uses: egor-tensin/setup-mingw@v3
+        with:
+          platform: x64
+
+      - name: Verify toolchains
+        shell: pwsh
+        run: |
+          dotnet --info
+          gfortran --version
+
+      - name: Build Fortran shared library
+        shell: pwsh
+        run: |
+          ./lib/build.ps1
+
+      - name: Restore and build solution
+        shell: pwsh
+        run: |
+          cd clacF
+          dotnet restore
+          dotnet build --configuration $env:DOTNET_CONFIGURATION --no-restore

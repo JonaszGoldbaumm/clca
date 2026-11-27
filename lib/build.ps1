@@ -1,3 +1,5 @@
+$p = $PWD
+cd $Script:PSScriptRoot
 $srcF = $(gci . -Filter "*.f90")
 echo "Found $($srcF.Length) library sources:"
 foreach ($file in $srcF) {
@@ -7,6 +9,7 @@ foreach ($file in $srcF) {
 gfortran -shared -o MathBase.dll @srcF
 if (!($LastExitCode -eq 0)) {
     echo "Compilation failed with exitcode: $LastExitCode"
-    return
+    return -1
 }
 ri *.mod
+cd $p
